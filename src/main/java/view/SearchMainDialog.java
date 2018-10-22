@@ -14,7 +14,7 @@ public class SearchMainDialog {
 	public JFrame frame = new JFrame();
 	public Controller controller;
 	//public List<Student> students;
-	public TableComponent table = new TableComponent(controller);
+	//public TableComponent table = new TableComponent(controller);
 
 	public SearchMainDialog(Controller controller) {
 		this.controller = controller;	
@@ -26,14 +26,14 @@ public class SearchMainDialog {
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBounds(40, 90, 600, 800);
-		mainPanel.add(table);
+	//	mainPanel.add(table);
 
 		frame.add(mainPanel);	
 	}
 	
 	public void update()
 	{
-		table.update();
+		//table.update();
 	}
 	
 	public void show() {

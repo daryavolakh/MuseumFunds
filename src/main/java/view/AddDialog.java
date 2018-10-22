@@ -35,14 +35,14 @@ public class AddDialog {
 		input2.setBounds(20, 60, 250, 30);
 		input3.setBounds(20, 100, 250, 30);
 		input4.setBounds(20, 140, 250, 30);
-		input5.setBounds(20, 180, 250, 30);
+	//	input5.setBounds(20, 180, 250, 30);
 		buttonAdd.setBounds(100, 300, 100, 30);
 
 		dialog.add(input1);
 		dialog.add(input2);
 		dialog.add(input3);
 		dialog.add(input4);
-		dialog.add(input5);
+		//dialog.add(input5);
 		dialog.add(buttonAdd);
 	}
 
@@ -56,8 +56,7 @@ public class AddDialog {
 				exhibit.invNumber = Integer.parseInt(input1.getText());
 				exhibit.name = input2.getText();
 				exhibit.dateOfCreation = input3.getText();
-				exhibit.author.name = input4.getText();
-				exhibit.author.surname = input5.getText();				
+				exhibit.author = input4.getText();			
 
 				controller.addExhibit(exhibit);
 

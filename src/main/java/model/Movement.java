@@ -3,9 +3,11 @@ package model;
 import java.util.Date;
 
 public class Movement {
-	private Date dateOfTransfer;
-	private Date dateOfReturn;
-	private Organization organization;
+	public Exhibit exhibit;
+	public Date dateOfTransfer;
+	public Date dateOfReturn;
+	public String organization;
+	//public Organization organization;
 	
 	public Date getDateOfTransfer()
 	{
@@ -25,13 +27,23 @@ public class Movement {
 		this.dateOfReturn = dateOfReturn;
 	}
 	
-	public String getOrganizationName()
+	public String getOrganization()
 	{
-		return organization.getName();
+		return organization;
 	}
 	
-	public void setOrganizationName(String name)
+	public void setOrganization(String organization)
 	{
-		organization.setName(name);
+		this.organization = organization;
 	}
+//	
+//	public String getOrganizationName()
+//	{
+//		return organization.getName();
+//	}
+//	
+//	public void setOrganizationName(String name)
+//	{
+//		organization.setName(name);
+//	}
 }

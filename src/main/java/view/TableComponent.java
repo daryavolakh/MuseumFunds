@@ -1,7 +1,6 @@
 package view;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -11,6 +10,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import controller.Controller;
+import model.Exhibit;
+import model.Movement;
 
 public class TableComponent extends JPanel {
 	public Controller controller;
@@ -19,12 +20,10 @@ public class TableComponent extends JPanel {
 	public Vector<String> columns = new Vector<String>();
 	public DefaultTableModel model = new DefaultTableModel(columns, 0);
 	public JTable table = new JTable();
-	public List exhibits;
-	// public List<Student> students = new ArrayList<Student>();
 
-	public TableComponent(Controller controller) {// , List<Student> students) {
+	public TableComponent(Controller controller) {
 		this.controller = controller;
-		exhibits = controller.getExhibits();
+
 		panelTable.setPreferredSize(new Dimension(500, 650));
 
 		columns.add("Инв.номер");
@@ -37,31 +36,49 @@ public class TableComponent extends JPanel {
 		scrollPane.setBounds(20, 70, 10, 1);
 
 		panelTable.add(scrollPane);
-
 		add(panelTable);
 	}
 
-	public void update() {
+	
+	public void updateTableExhibitions() {
 		clearTable();
-
-		for (int index = 0; index < (controller.getExhibits()).size(); index++) {
-
+		List<Exhibit> exhibits = controller.getExhibits();
+		System.out.println("exhibits COUNT: " + exhibits.size());
+		for (int index = 0; index < exhibits.size(); index++) {
 			Vector row = new Vector();
 
-			row.add((controller.getExhibit(index)).invNumber);
-			row.add((controller.getExhibit(index)).name);
-			row.add((controller.getExhibit(index)).dateOfCreation);
-			row.add((controller.getExhibit(index)).author.getName()
-					+ (controller.getExhibit(index)).author.getSurname());
-
-			model.addRow(row);
+			row.add((exhibits.get(index)).invNumber);
+			row.add((exhibits.get(index)).name);
+			row.add((exhibits.get(index)).dateOfCreation);
+			row.add((exhibits.get(index)).author);
+			
+			System.out.println("-> " + (exhibits.get(index)).invNumber);
+			model.addRow(row);			
 		}
-
+		System.out.println("ROW COUNT: " + model.getRowCount());
+		
 	}
 
 	public void clearTable() {
 		for (int index = model.getRowCount() - 1; index >= 0; index--) {
 			model.removeRow(index);
+		}
+	}
+	
+	public void updateTableMovement() {
+		clearTable();
+		List<Movement> movements = controller.getMovements();
+		System.out.println("exhibits COUNT: " + exhibits.size());
+		for (int index = 0; index < exhibits.size(); index++) {
+			Vector row = new Vector();
+
+			row.add((exhibits.get(index)).invNumber);
+			row.add((exhibits.get(index)).name);
+			row.add((exhibits.get(index)).dateOfCreation);
+			row.add((exhibits.get(index)).author);
+			
+			System.out.println("-> " + (exhibits.get(index)).invNumber);
+			model.addRow(row);			
 		}
 	}
 }

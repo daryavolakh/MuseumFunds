@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Author {
 	public String name;
-	public String surname;
+	//public String surname;
 	public Date dateOfBirth;
 	public String country;
 
@@ -17,14 +17,14 @@ public class Author {
 		this.name = name;
 	}
 
-	public String getSurname() {
-		return surname;
-	}
-
-	public void setSurname(String surname)
-	{
-		this.surname = surname;
-	}
+//	public String getSurname() {
+//		return surname;
+//	}
+//
+//	public void setSurname(String surname)
+//	{
+//		this.surname = surname;
+//	}
 	
 	public Date getDateOfBirth() {
 		return dateOfBirth;

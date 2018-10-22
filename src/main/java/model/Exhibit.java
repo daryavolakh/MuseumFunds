@@ -7,8 +7,8 @@ public class Exhibit {
 	public int invNumber;
 	public String name;
 	public String dateOfCreation;
-	public Author author;
-	public Movement movement;  //подумать!
+	public String author;
+	public Movement movement; 
 	
 	public int getInvNumber() {
 		return invNumber;
@@ -35,24 +35,11 @@ public class Exhibit {
 	}
 	
 	public String getAuthor() {
-		String authorNS = author.getSurname() + " " + author.getName();
-		return authorNS;
-	}
-//	
-//	public String getAuthorName() {
-//		return author.getName();
-//	}
-	
-	public void setAuthorName(String name) {
-		author.setName(name);
+		return author;
 	}
 	
-//	public String getAuthorSurname() {
-//		return author.getSurname();
-//	}
-	
-	public void setAuthorSurname(String surname) {
-		author.setName(surname);
+	public void setAuthor(String author) {
+		this.author = author;
 	}
 
 	public Movement getMovement() {
