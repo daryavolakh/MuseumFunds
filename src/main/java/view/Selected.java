@@ -13,23 +13,22 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 
 import controller.Controller;
-import model.SearchStudentsDialog;
-import model.Student;
 
 public class Selected {
+	//поиск по критериям. Он не нужен! 
 
 	public JFrame frame = new JFrame();
 	public JDialog dialog = new JDialog();
 	public JButton buttonSearch = new JButton("OK");
-	public MainWindow mainwindow = new MainWindow();
-	public Controller controller = new Controller();
+	public MainWindow mainwindow;
+	public Controller controller;
 	public Vector<String> items = new Vector<String>();
 	public JComboBox comboBox = new JComboBox(items);
 	public JTextField in1 = new JTextField();
 	public JTextField in2 = new JTextField();
 	public JTextField in3 = new JTextField();
 	public JTextField in4 = new JTextField();
-	public List<Student> founded = new ArrayList<Student>();
+	//public List<Student> founded = new ArrayList<Student>();
 	private boolean dOrS;
 
 	public Selected(MainWindow mainwindow, Controller controller, boolean dOrS) {
@@ -43,9 +42,9 @@ public class Selected {
 		dialog.setLocationByPlatform(true);
 
 		items.add("по фамилии и числу членов семьи");
-		items.add("по числу членов семьи и занимаемой S");
+	/*	items.add("по числу членов семьи и занимаемой S");
 		items.add("по фамилии и занимаемой S");
-		items.add("вывести всех студентов, чья S на человека меньше/больше заданного предела");
+		items.add("вывести всех студентов, чья S на человека меньше/больше заданного предела");*/
 
 		comboBox.setBounds(25, 35, 245, 30);
 		buttonSearch.setBounds(45, 100, 180, 30);
@@ -56,7 +55,7 @@ public class Selected {
 
 	public void searchStud() {
 
-		buttonSearch.addActionListener(new ActionListener() {
+	/*	buttonSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				if (comboBox.getSelectedItem() == items.get(0)) {
 
@@ -92,7 +91,7 @@ public class Selected {
 					dialog.setVisible(false);
 				}
 			}
-		});
+		});*/
 	}
 
 	public void show() {

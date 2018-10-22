@@ -1,5 +1,6 @@
 import controller.Controller;
 import model.MuseumsDB;
+import view.MainWindow;
 
 public class MainClass {
 	MuseumsDB museumsDb = new MuseumsDB();

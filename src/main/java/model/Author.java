@@ -3,10 +3,10 @@ package model;
 import java.util.Date;
 
 public class Author {
-	private String name;
-	private String surname;
-	private Date dateOfBirth;
-	private String country;
+	public String name;
+	public String surname;
+	public Date dateOfBirth;
+	public String country;
 
 	public String getName() {
 		return name;

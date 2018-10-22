@@ -4,12 +4,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Exhibit {
-	private int invNumber;
-	private String name;
-	private Date dateOfCreation;
-	private Author author;
-	private List<Exhibition> exhibitions;  //подумать!
-	private Movement movement;  //подумать!
+	public int invNumber;
+	public String name;
+	public String dateOfCreation;
+	public Author author;
+	public Movement movement;  //подумать!
 	
 	public int getInvNumber() {
 		return invNumber;
@@ -27,24 +26,30 @@ public class Exhibit {
 		this.name = name;
 	}
 	
-	public Date getDateOfCreation() {
+	public String getDateOfCreation() {
 		return dateOfCreation;
 	}
 	
-	public void setDateOfCreation(Date dateOfCreation) {
+	public void setDateOfCreation(String dateOfCreation) {
 		this.dateOfCreation = dateOfCreation;
 	}
 	
-	public String getAuthorName() {
-		return author.getName();
+	public String getAuthor() {
+		String authorNS = author.getSurname() + " " + author.getName();
+		return authorNS;
 	}
+//	
+//	public String getAuthorName() {
+//		return author.getName();
+//	}
 	
 	public void setAuthorName(String name) {
 		author.setName(name);
 	}
-	public String getAuthorSurname() {
-		return author.getSurname();
-	}
+	
+//	public String getAuthorSurname() {
+//		return author.getSurname();
+//	}
 	
 	public void setAuthorSurname(String surname) {
 		author.setName(surname);
@@ -56,14 +61,6 @@ public class Exhibit {
 
 	public void setMovement(Movement movement) {
 		this.movement = movement;
-	}
-
-	public List<Exhibition> getExhibitions() {
-		return exhibitions;
-	}
-
-	public void addExhibition(Exhibition exhibition) {
-		exhibitions.add(exhibition);
 	}
 	
 }

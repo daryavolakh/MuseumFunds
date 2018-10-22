@@ -17,11 +17,13 @@ import controller.Controller;
 
 public class MainWindow {
 	public JFrame frame = new JFrame();
-	public Controller controller = new Controller();
-	public TableComponent table = new TableComponent(controller, controller.getStudents());
+	public Controller controller;
+	public TableComponent table = new TableComponent(controller);
 	public JPanel mainPanel = new JPanel();
 
-	public MainWindow() {
+	public MainWindow(Controller controller) {
+		this.controller = controller;
+		
 		frame.setTitle("Lab 2");
 		frame.setSize(700, 670);
 		frame.setLayout(null);
@@ -30,51 +32,16 @@ public class MainWindow {
 		JButton buttAdd = new JButton("add");
 		JButton buttSearch = new JButton("search");
 		JButton buttDelete = new JButton("delete");
-		JToolBar toolbar = new JToolBar("toolbar");
-		JMenuBar menuBar = new JMenuBar();
-		JMenu menu = new JMenu("MENU");
-		JMenuItem menuAdd = new JMenuItem("add");
-		JMenuItem menuDelete = new JMenuItem("delete");
-		JMenuItem menuSearch = new JMenuItem("search");
+		
 		Font font = new Font("Verdana", Font.PLAIN, 11);		
-		
-		menuBar.add(menu);
-		
-		menu.setFont(font);
-		menuAdd.setFont(font);
-		menuDelete.setFont(font);
-		menuSearch.setFont(font);
 
-		toolbar.setFloatable(false);
-		toolbar.setOrientation(SwingConstants.HORIZONTAL);
-		toolbar.setOrientation(SwingConstants.CENTER);
-
-		JButton toolbarAdd = new JButton("add");
-		JButton toolbarSearch = new JButton("search");
-		JButton toolbarDelete = new JButton("delete");
-
-		menu.add(menuAdd);
-		menu.add(menuDelete);
-		menu.add(menuSearch);
-		
-		menu.addSeparator();
-		
-		toolbar.add(toolbarAdd);
-		toolbar.add(toolbarSearch);
-		toolbar.add(toolbarDelete);
-
-		menu.setBounds(0, 0, 70, 20);
 		buttAdd.setBounds(125, 50, 70, 20);
 		buttSearch.setBounds(200, 50, 80, 20);
 		buttDelete.setBounds(285, 50, 80, 20);
-		toolbar.setBounds(460, 0, 224, 30);
 
 		mainPanel.setBounds(40, 90, 600, 800);
 		mainPanel.add(table);		
-		
-		frame.setJMenuBar(menuBar);
-		
-		frame.add(toolbar);
+
 		frame.add(buttAdd);
 		frame.add(buttSearch);
 		frame.add(buttDelete);
@@ -97,43 +64,6 @@ public class MainWindow {
 				search();
 			}
 		});
-
-
-		toolbarAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				add();
-			}
-		});
-
-		toolbarDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				delete();
-			}
-		});
-
-		toolbarSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				search();
-			}
-		});
-		
-		menuAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				add();
-			}
-		});
-		
-		menuDelete.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				delete();
-			}
-		});
-
-		menuSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent event) {
-				search();
-			}
-		});	
 	}
 
 	public void add() {
@@ -157,10 +87,10 @@ public class MainWindow {
 
 	public void update() {		
 		mainPanel.removeAll();
-		TableComponent table = new TableComponent(controller, controller.getStudents());
+		TableComponent table = new TableComponent(controller);
 		
 		mainPanel.add(table);	
-		table.update(controller.getStudents());
+		//table.update(controller.getStudents());
 	}
 
 	public void show() {

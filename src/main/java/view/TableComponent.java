@@ -11,27 +11,26 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import controller.Controller;
-import model.Student;
 
 public class TableComponent extends JPanel {
-	public Controller controller = new Controller();
+	public Controller controller;
 	public JPanel panelTable = new JPanel();
 	public JPanel panelButtons = new JPanel();
 	public Vector<String> columns = new Vector<String>();
 	public DefaultTableModel model = new DefaultTableModel(columns, 0);
 	public JTable table = new JTable();
-	public List<Student> students = new ArrayList<Student>();
+	public List exhibits;
+	// public List<Student> students = new ArrayList<Student>();
 
-	public TableComponent(Controller controller, List<Student> students) {
+	public TableComponent(Controller controller) {// , List<Student> students) {
 		this.controller = controller;
-		this.students = students;
+		exhibits = controller.getExhibits();
 		panelTable.setPreferredSize(new Dimension(500, 650));
 
-		columns.add("ФИО студента");
-		columns.add("Адрес");
-		columns.add("Кол-во членов семьи");
-		columns.add("Размер жилой S");
-		columns.add("Жилая S на чел.");
+		columns.add("Инв.номер");
+		columns.add("Экспонат");
+		columns.add("Дата создания");
+		columns.add("Автор");
 
 		table.setModel(model);
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -40,52 +39,29 @@ public class TableComponent extends JPanel {
 		panelTable.add(scrollPane);
 
 		add(panelTable);
-
-		
 	}
 
-	public void addRow(Student student) {
-		Vector row = new Vector();
+	public void update() {
+		clearTable();
 
-		row.add(student.surname + " " + student.name);
-		row.add(student.town + " " + student.street + " " + student.house);
-		row.add(student.familyMembers);
-		row.add(student.area);
-		row.add(student.areaPerPerson);
+		for (int index = 0; index < (controller.getExhibits()).size(); index++) {
 
-		model.addRow(row);
-	}
+			Vector row = new Vector();
 
-	public void addToTable(int from, int to) {
-		if (to == 1) {
-			Student student = new Student();
-			student = students.get(0);
-			addRow(student);
+			row.add((controller.getExhibit(index)).invNumber);
+			row.add((controller.getExhibit(index)).name);
+			row.add((controller.getExhibit(index)).dateOfCreation);
+			row.add((controller.getExhibit(index)).author.getName()
+					+ (controller.getExhibit(index)).author.getSurname());
+
+			model.addRow(row);
 		}
 
-		else {
-			for (int index = from; index < to; index++) {
-				Student student = new Student();
-				student = students.get(index);
-				addRow(student);
-			}
-		}
 	}
 
-	
 	public void clearTable() {
 		for (int index = model.getRowCount() - 1; index >= 0; index--) {
 			model.removeRow(index);
-		}
-	}
-
-	public void update(List<Student> students) {
-		this.students = students;
-		clearTable();
-		if (students.size() == 1) {
-			addToTable(0, students.size());
-			
-			//добавить обновление мб
 		}
 	}
 }

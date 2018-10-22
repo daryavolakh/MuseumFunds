@@ -12,13 +12,12 @@ import model.*;
 public class SearchMainDialog {
 
 	public JFrame frame = new JFrame();
-	public Controller controller = new Controller();
-	public List<Student> students = new ArrayList<Student>();
-	public TableComponent table = new TableComponent(controller,students);
+	public Controller controller;
+	//public List<Student> students;
+	public TableComponent table = new TableComponent(controller);
 
-	public SearchMainDialog(Controller controller, List<Student> students) {
-		this.controller = controller;
-		this.students = students;		
+	public SearchMainDialog(Controller controller) {
+		this.controller = controller;	
 		
 		frame.setTitle("Search");
 		frame.setSize(700, 800);
@@ -34,7 +33,7 @@ public class SearchMainDialog {
 	
 	public void update()
 	{
-		table.update(students);
+		table.update();
 	}
 	
 	public void show() {
