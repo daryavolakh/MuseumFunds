@@ -18,12 +18,11 @@ public class MuseumsDB {
 
 	private static final String SELECT_EXHIBITS = "SELECT * FROM exhibits;";
 	private static final String INSERT_EXHIBIT = "INSERT INTO exhibits VALUES(?,?,?,?);";
-	private static final String SELECT_MOVEMENTS = "SELECT * FROM movements;";  // создать таблицу!
-	private static final String INSERT_MOVEMENT = "INSERT INTO organizations VALUES(?,?,?);";
-	private static final String DELETE_EXHIBIT = "DELETE FROM exhibits WHERE "
-			+ "invNumber=? AND name=? AND dateOfCreation=? AND author=? ;";
-	private static final String DELETE_MOVEMENT = "DELETE FROM exhibits WHERE "
-			+ "dateOfTransfer=? AND dateOfReturn=? AND organization=? ;";
+	private static final String INSERT_MOVEMENT = "INSERT INTO movements VALUES(?,?,?,?);";
+	private static final String DELETE_EXHIBIT = "DELETE FROM exhibits WHERE invNumber=?;";
+	private static final String DELETE_MOVEMENT = "DELETE FROM movements WHERE "
+			+ "invNumber=? AND dateOfTransfer=? AND dateOfReturn=?;";
+	private static final String EDIT_EXHIBIT = "UPDATE exhibits SET invNumber=? name=? dateOfCreation=? author=?;";
 
 	// private static final String UPDATE_EXHIBIT = "UPDATE exhibits SET " +
 	// "surname=?,name=?,phone=?,city=?,street=?,house=?,reg_date=?" +
@@ -102,6 +101,22 @@ public class MuseumsDB {
 		return exhibits;
 	}
 
+	public void deleteExhibit(Exhibit exhibit) {
+		try {
+			statement = connection.prepareStatement(DELETE_EXHIBIT);
+
+			statement.setInt(1, exhibit.getInvNumber());
+//			statement.setString(2, exhibit.getName());
+//			statement.setString(3, exhibit.getDateOfCreation());
+//			statement.setString(4, exhibit.getAuthor());
+
+			statement.execute();
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+	}
+	
 	public void addExhibit(Exhibit exhibit) {
 		try {
 			statement = connection.prepareStatement(INSERT_EXHIBIT);
@@ -119,71 +134,72 @@ public class MuseumsDB {
 		}
 	}
 
-	public void deleteExhibit(Exhibit exhibit) {
+	public void editExhibit(Exhibit oldExhibit, Exhibit newExhibit ) {
 		try {
-			statement = connection.prepareStatement(DELETE_EXHIBIT);
+			statement = connection.prepareStatement(EDIT_EXHIBIT);
 
-			statement.setInt(1, exhibit.getInvNumber());
-			statement.setString(2, exhibit.getName());
-			statement.setString(3, exhibit.getDateOfCreation());
-			statement.setString(4, exhibit.getAuthor());
-
+			statement.setInt(1, newExhibit.getInvNumber());
+			statement.setString(2, newExhibit.getName());
+			statement.setString(3, newExhibit.getDateOfCreation());
+			statement.setString(4, newExhibit.getAuthor());
+			statement.setInt(7, oldExhibit.getInvNumber());
+			statement.setString(8, oldExhibit.getName());
+			statement.setString(9, oldExhibit.getDateOfCreation());
+			statement.setString(10, oldExhibit.getAuthor());
+			
 			statement.execute();
-
-			exhibits.remove(exhibit);
-		} catch (SQLException e) {
-			e.getMessage();
-			e.printStackTrace();
-		}
-	}
-
-	public void addMovement(Exhibit exhibit) {
-		try {
-			statement = connection.prepareStatement(INSERT_MOVEMENT);
-
-			statement.setInt(1, exhibit.getInvNumber());
-			statement.setString(2, exhibit.getName());
-			statement.setString(3, exhibit.getDateOfCreation());
-			statement.setString(4, exhibit.getAuthor());
-
-			statement.execute();
-
-			exhibits.add(exhibit);
-		} catch (SQLException e) {
-			e.getMessage();
-			e.printStackTrace();
-		}
-	}
-
-	public void deleteMovement(Exhibit exhibit) {
-		try {
-			statement = connection.prepareStatement(DELETE_MOVEMENT);
-
-			statement.setInt(1, exhibit.getInvNumber());
-			statement.setString(2, exhibit.getName());
-			statement.setString(3, exhibit.getDateOfCreation());
-			statement.setString(4, exhibit.getAuthor());
-
-			statement.execute();
-
-			exhibits.remove(exhibit);
+			
 		} catch (SQLException e) {
 			e.getMessage();
 			e.printStackTrace();
 		}
 	}
 	
-	public List<Movement> getTableMovements(String exhibit){
+	public void addMovement(Movement movement) {
+		try {
+			statement = connection.prepareStatement(INSERT_MOVEMENT);
+
+			statement.setInt(1, movement.getExhibit().getInvNumber());
+			statement.setString(2, movement.getDateOfTransfer());
+			statement.setString(3, movement.getDateOfReturn());
+			statement.setString(4, movement.getOrganization());
+
+			statement.execute();
+
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteMovement(Movement movement) {
+		try {
+			statement = connection.prepareStatement(DELETE_MOVEMENT);
+
+			statement.setInt(1, movement.getExhibit().getInvNumber());
+			statement.setString(2, movement.getDateOfTransfer());
+			statement.setString(3, movement.getDateOfReturn());
+			//statement.setString(4, movement.getOrganization());
+
+			statement.execute();
+
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+	}
+	
+	public List<Movement> getTableMovement(int invNumber){
         List<Movement> list = new ArrayList<Movement>();
         try {
             Statement statement=connection.createStatement();
 
-            ResultSet resultSet=statement.executeQuery("SELECT dateOfTransfer, dateOfReturn, organization FROM movements WHERE exhibit="+ exhibit +";");
+            ResultSet resultSet=statement.executeQuery("SELECT dateOfTransfer, dateOfReturn, organization FROM movements WHERE invNumber="+ invNumber +";");
             while(resultSet.next()){
             	Movement movement = new Movement();
 
-            	movement.setDateOfTransfer(resultSet.getDate(1));            	
-            	movement.setDateOfReturn(resultSet.getDate(2));
+            	movement.setDateOfTransfer(resultSet.getString(1));            	
+            	movement.setDateOfReturn(resultSet.getString(2));
             	movement.setOrganization(resultSet.getString(3));
                 
                 list.add(movement);

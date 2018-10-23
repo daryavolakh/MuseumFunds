@@ -1,29 +1,34 @@
 package model;
 
-import java.util.Date;
-
 public class Movement {
 	public Exhibit exhibit;
-	public Date dateOfTransfer;
-	public Date dateOfReturn;
+	public String dateOfTransfer;
+	public String dateOfReturn;
 	public String organization;
-	//public Organization organization;
 	
-	public Date getDateOfTransfer()
+	public Exhibit getExhibit() {
+		return exhibit;
+	}
+	
+	public void setExhibit(Exhibit newExhibit) {
+		exhibit = newExhibit;
+	}
+	
+	public String getDateOfTransfer()
 	{
 		return dateOfTransfer;
 	}
 
-	public void setDateOfTransfer(Date dateOfTransfer) {
+	public void setDateOfTransfer(String dateOfTransfer) {
 		this.dateOfTransfer = dateOfTransfer;
 	}
 	
-	public Date getDateOfReturn()
+	public String getDateOfReturn()
 	{
 		return dateOfReturn;
 	}
 
-	public void setDateOfReturn(Date dateOfReturn) {
+	public void setDateOfReturn(String dateOfReturn) {
 		this.dateOfReturn = dateOfReturn;
 	}
 	

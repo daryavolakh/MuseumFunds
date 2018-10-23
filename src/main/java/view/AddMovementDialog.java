@@ -2,27 +2,29 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
 import controller.Controller;
-import model.Exhibit;
+import model.Movement;
 
-public class AddDialog {
+public class AddMovementDialog {
 
 	public JDialog dialog = new JDialog();
 	public JButton buttonAdd = new JButton("OK");
 	public JTextField input1 = new JTextField("Инв.номер: ");
-	public JTextField input2 = new JTextField("Имя: ");
-	public JTextField input3 = new JTextField("Дата создания: ");
-	public JTextField input4 = new JTextField("Имя автора: ");
-	public JTextField input5 = new JTextField("Фамилия автора: ");
+	public JTextField input2 = new JTextField("Дата получения: ");
+	public JTextField input3 = new JTextField("Дата возврата: ");
+	public JTextField input4 = new JTextField("Организация: ");
 	private MainWindow mainWindow;
 	public Controller controller;
 
-	public AddDialog(MainWindow mainWindow, Controller controller) {
+	public AddMovementDialog(MainWindow mainWindow, Controller controller) {
 	
 		this.mainWindow = mainWindow;
 		this.controller = controller;
@@ -35,14 +37,12 @@ public class AddDialog {
 		input2.setBounds(20, 60, 250, 30);
 		input3.setBounds(20, 100, 250, 30);
 		input4.setBounds(20, 140, 250, 30);
-	//	input5.setBounds(20, 180, 250, 30);
 		buttonAdd.setBounds(100, 300, 100, 30);
 
 		dialog.add(input1);
 		dialog.add(input2);
 		dialog.add(input3);
 		dialog.add(input4);
-		//dialog.add(input5);
 		dialog.add(buttonAdd);
 	}
 
@@ -51,14 +51,35 @@ public class AddDialog {
 
 			public void actionPerformed(ActionEvent event) {
 
-				Exhibit exhibit = new Exhibit();
+				Movement movement = new Movement();
 
-				exhibit.invNumber = Integer.parseInt(input1.getText());
-				exhibit.name = input2.getText();
-				exhibit.dateOfCreation = input3.getText();
-				exhibit.author = input4.getText();			
+				movement.exhibit = controller.getExhibitByInvNumber(Integer.parseInt(input1.getText()));
+				movement.dateOfTransfer = input2.getText();
+				movement.dateOfReturn = input3.getText();
+				movement.organization = input4.getText();			
 
-				controller.addExhibit(exhibit);
+				controller.addMovement(movement);
+
+				mainWindow.update();
+
+				dialog.setVisible(false);
+			}
+		});
+	}
+	
+	public void setInfoForDelete() {
+		dialog.remove(input4);
+		buttonAdd.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent event) {
+
+				Movement movement = new Movement();
+
+				movement.exhibit = controller.getExhibitByInvNumber(Integer.parseInt(input1.getText()));
+				movement.dateOfTransfer = input2.getText();
+				movement.dateOfReturn = input3.getText();			
+
+				controller.deleteMovement(movement);
 
 				mainWindow.update();
 

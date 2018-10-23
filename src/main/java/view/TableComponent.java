@@ -23,14 +23,7 @@ public class TableComponent extends JPanel {
 
 	public TableComponent(Controller controller) {
 		this.controller = controller;
-
-		panelTable.setPreferredSize(new Dimension(500, 650));
-
-		columns.add("Инв.номер");
-		columns.add("Экспонат");
-		columns.add("Дата создания");
-		columns.add("Автор");
-
+		//panelTable.setPreferredSize(new Dimension(500, 1050));
 		table.setModel(model);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(20, 70, 10, 1);
@@ -40,7 +33,8 @@ public class TableComponent extends JPanel {
 	}
 
 	
-	public void updateTableExhibitions() {
+	public void updateTableExhibitions() {	
+		setModelForExhibits();
 		clearTable();
 		List<Exhibit> exhibits = controller.getExhibits();
 		System.out.println("exhibits COUNT: " + exhibits.size());
@@ -65,20 +59,50 @@ public class TableComponent extends JPanel {
 		}
 	}
 	
-	public void updateTableMovement() {
+	public void updateTableMovement(int invNumber) {	
+		setModelForMovement();
 		clearTable();
-		List<Movement> movements = controller.getMovements();
-		System.out.println("exhibits COUNT: " + exhibits.size());
-		for (int index = 0; index < exhibits.size(); index++) {
+		List<Movement> movements = controller.getMovement(invNumber);
+		System.out.println("exhibits COUNT: " + movements.size());
+		for (int index = 0; index < movements.size(); index++) {
 			Vector row = new Vector();
 
-			row.add((exhibits.get(index)).invNumber);
-			row.add((exhibits.get(index)).name);
-			row.add((exhibits.get(index)).dateOfCreation);
-			row.add((exhibits.get(index)).author);
+			row.add((movements.get(index)).dateOfTransfer);
+			row.add((movements.get(index)).dateOfReturn);
+			row.add((movements.get(index)).organization);
 			
-			System.out.println("-> " + (exhibits.get(index)).invNumber);
+			System.out.println("-> " + (movements.get(index)).dateOfTransfer);
 			model.addRow(row);			
 		}
+	}
+	
+	public void setModelForMovement() {
+		Vector<String> columns = new Vector<String>();
+		model = new DefaultTableModel(columns, 0);		
+		
+		columns.add("Дата получения");
+		columns.add("Дата возврата");
+		columns.add("Организация");
+		table.setModel(model);
+	}
+	
+	public void setModelForExhibits() {
+		Vector<String> columns = new Vector<String>();
+		model = new DefaultTableModel(columns, 0);		
+		
+		columns.add("Инв.номер");
+		columns.add("Экспонат");
+		columns.add("Дата создания");
+		columns.add("Автор");
+		
+		table.setModel(model);
+	}
+	
+	public JTable getTable() {
+		return table;
+	}
+	
+	public DefaultTableModel getModel() {
+		return model;
 	}
 }
