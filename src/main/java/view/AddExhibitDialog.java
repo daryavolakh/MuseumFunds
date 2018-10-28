@@ -17,8 +17,9 @@ public class AddExhibitDialog {
 	public JTextField input1 = new JTextField("Инв.номер: ");
 	public JTextField input2 = new JTextField("Имя: ");
 	public JTextField input3 = new JTextField("Дата создания: ");
-	public JTextField input4 = new JTextField("Имя автора: ");
-	public JTextField input5 = new JTextField("Фамилия автора: ");
+	public JTextField input4 = new JTextField("Автор: ");
+	public JTextField input5 = new JTextField("Комплект: ");
+	public JTextField input6 = new JTextField("Ответственный: ");
 	private MainWindow mainWindow;
 	public Controller controller;
 
@@ -35,12 +36,16 @@ public class AddExhibitDialog {
 		input2.setBounds(20, 60, 250, 30);
 		input3.setBounds(20, 100, 250, 30);
 		input4.setBounds(20, 140, 250, 30);
+		input5.setBounds(20,180,250,30);
+		input6.setBounds(20,220,250,30);
 		buttonAdd.setBounds(100, 300, 100, 30);
 
 		dialog.add(input1);
 		dialog.add(input2);
 		dialog.add(input3);
 		dialog.add(input4);
+		dialog.add(input5);
+		dialog.add(input6);
 		dialog.add(buttonAdd);
 	}
 
@@ -54,7 +59,9 @@ public class AddExhibitDialog {
 				exhibit.invNumber = Integer.parseInt(input1.getText());
 				exhibit.name = input2.getText();
 				exhibit.dateOfCreation = input3.getText();
-				exhibit.author = input4.getText();			
+				exhibit.author = input4.getText();	
+				exhibit.kit = input5.getText();
+				exhibit.responsible = input6.getText();
 
 				controller.addExhibit(exhibit);
 
@@ -67,15 +74,16 @@ public class AddExhibitDialog {
 	
 	public void setInfoForEdit(final int number) {
 		buttonAdd.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent event) {
-				Exhibit exhibit = controller.getExhibitByInvNumber(number);
+				Exhibit exhibit = controller.getExhibit(number);
 				Exhibit newExhibit = new Exhibit();
 
-				exhibit.invNumber = Integer.parseInt(input1.getText());
-				exhibit.name = input2.getText();
-				exhibit.dateOfCreation = input3.getText();
-				exhibit.author = input4.getText();			
+				newExhibit.setInvNumber(Integer.parseInt(input1.getText()));
+				newExhibit.setName(input2.getText());
+				newExhibit.setDateOfCreation(input3.getText());
+				newExhibit.setAuthor(input4.getText());	
+				newExhibit.setKit(input5.getText());
+				newExhibit.setResponsible(input6.getText());
 
 				controller.editExhibit(exhibit, newExhibit);
 

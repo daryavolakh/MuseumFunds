@@ -1,14 +1,13 @@
 package model;
 
-import java.util.Date;
-import java.util.List;
-
 public class Exhibit {
 	public int invNumber;
 	public String name;
 	public String dateOfCreation;
 	public String author;
 	public Movement movement; 
+	public String kit;
+	public String responsible;
 	
 	public int getInvNumber() {
 		return invNumber;
@@ -40,6 +39,22 @@ public class Exhibit {
 	
 	public void setAuthor(String author) {
 		this.author = author;
+	}
+	
+	public String getKit() {
+		return kit;
+	}
+	
+	public void setKit(String kit) {
+		this.kit = kit;
+	}
+	
+	public String getResponsible() {
+		return responsible;
+	}
+	
+	public void setResponsible(String responsible) {
+		this.responsible = responsible;
 	}
 
 	public Movement getMovement() {

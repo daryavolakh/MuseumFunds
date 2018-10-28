@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import controller.Controller;
@@ -14,46 +17,70 @@ public class MainWindow {
 	public Controller controller;
 	public TableComponent table;
 	public TableComponent tableMovement;
-	public JPanel mainPanel = new JPanel();
-	private JButton buttonMovements;
+	public JPanel mainPanel;
+	private boolean isMainTable = true;
+	private int invNumberForMovement;
+	private JMenuBar menuBar;
+	private JMenu menuAdd;
+	private JMenu menuEdit;
+	private JMenu menuDelete;
+	private JMenu menuShow;
 
 	public MainWindow(Controller controller) {
 		this.controller = controller;
+		
+		mainPanel = new JPanel();
 		table = new TableComponent(controller);
 		table.updateTableExhibitions();
-		
+
 		frame.setTitle("Lab 2");
-		frame.setSize(700, 670);
+		frame.setSize(700, 570);
 		frame.setLayout(null);
 		frame.setLocationByPlatform(true);
+		
+		menuBar = new JMenuBar();
+		menuAdd = new JMenu("Add");
+		menuEdit = new JMenu("Edit");
+		menuDelete = new JMenu("Delete");
+		menuShow = new JMenu("Show");		
 
-		JButton buttAdd = new JButton("add");
-		JButton buttEdit = new JButton("edit");
-		JButton buttDelete = new JButton("delete");
-		buttonMovements = new JButton("show movements");
-		JButton buttBack = new JButton("back");
-		JButton buttAddMovement = new JButton("add movement");	
-		JButton buttDeleteMovement = new JButton("delete movement");	
+		JMenuItem  buttAdd = new JMenuItem ("add exhibit");
+		JMenuItem  buttEdit = new JMenuItem ("edit exhibit");
+		JMenuItem  buttDelete = new JMenuItem ("delete exhibit");
+		JMenuItem  buttonMovements = new JMenuItem ("show movements");
+		JMenuItem  buttShowCard = new JMenuItem("show exhibit card");
+		JMenuItem  buttShowKits = new JMenuItem("show kits");
+		
+		JMenuItem  buttAddMovement = new JMenuItem ("add movement");
+		JMenuItem  buttDeleteMovement = new JMenuItem ("delete movement");
+		JButton  buttBack = new JButton ("back");
+		
+		menuAdd.add(buttAdd);
+		menuAdd.add(buttAddMovement);
+		
+		menuEdit.add(buttEdit);
+		
+		menuDelete.add(buttDelete);
+		menuDelete.add(buttDeleteMovement);
+		
+		menuShow.add(buttonMovements);
+		menuShow.add(buttShowKits);
+		menuShow.add(buttShowCard);
+		
+		
+		buttBack.setBounds(480, 10, 80, 20);
 
-		buttAdd.setBounds(125, 50, 70, 20);
-		buttEdit.setBounds(200, 50, 80, 20);
-		buttDelete.setBounds(285, 50, 80, 20);
-		buttonMovements.setBounds(370,50,150,20);
-		buttBack.setBounds(125, 75, 80, 20);
-		buttAddMovement.setBounds(210, 75, 150, 20);
-		buttDeleteMovement.setBounds(365, 75, 150, 20);
-
-		mainPanel.setBounds(40, 90, 600, 800);
-		mainPanel.add(table);		
-
-		frame.add(buttAdd);
-		frame.add(buttEdit);
-		frame.add(buttDelete);
-		frame.add(buttonMovements);
+		mainPanel.setBounds(40, 30, 600, 2000);
+		mainPanel.add(table);
+		
 		frame.add(buttBack);
-		frame.add(buttAddMovement);
-		frame.add(buttDeleteMovement);
 		frame.add(mainPanel);
+		
+		menuBar.add(menuAdd);
+		menuBar.add(menuEdit);
+		menuBar.add(menuDelete);
+		menuBar.add(menuShow);
+		frame.setJMenuBar(menuBar);
 
 		buttAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -69,39 +96,50 @@ public class MainWindow {
 
 		buttEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				//сперва выбрать строку!
-				int[] selectedRow = table.getTable().getSelectedRows();  
+				int[] selectedRow = table.getTable().getSelectedRows();
 				selectedRow[0] = table.getTable().convertRowIndexToModel(selectedRow[0]);
-				//Object value = table.getModel().getValueAt(selectedRow[0], 1);
-				table.getModel().getValueAt(selectedRow[0], 0);   //чекни!
+				table.getModel().getValueAt(selectedRow[0], 0); 
 				edit(selectedRow[0]);
 			}
 		});
-		
+
 		buttonMovements.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				showMovements();
+				isMainTable = false;
 			}
 		});
-		
+
 		buttBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				update();
+				isMainTable = true;
 			}
 		});
-		
+
 		buttAddMovement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				addMovement();				
+				addMovement();
 			}
 		});
-		
+
 		buttDeleteMovement.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				deleteMovement();				
+				deleteMovement();
 			}
 		});
 		
+		buttShowKits.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showKits();
+			}
+		});
+		
+		buttShowCard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showCard();
+			}
+		});
 		
 	}
 
@@ -110,13 +148,13 @@ public class MainWindow {
 		dialog.show();
 		dialog.setInfo();
 	}
-	
+
 	public void addMovement() {
 		AddMovementDialog dialog = new AddMovementDialog(MainWindow.this, controller);
 		dialog.show();
 		dialog.setInfo();
 	}
-	
+
 	public void deleteMovement() {
 		AddMovementDialog dialog = new AddMovementDialog(MainWindow.this, controller);
 		dialog.show();
@@ -130,26 +168,51 @@ public class MainWindow {
 	}
 
 	public void edit(int number) {
-		AddExhibitDialog dialog = new AddExhibitDialog(MainWindow.this, controller);
-		dialog.show();
-		dialog.setInfoForEdit(number);
+		if (isMainTable) {
+			AddExhibitDialog dialog = new AddExhibitDialog(MainWindow.this, controller);
+			dialog.show();
+			dialog.setInfoForEdit(number);
+		} else {
+			AddMovementDialog dialog = new AddMovementDialog(MainWindow.this, controller);
+			dialog.show();
+			dialog.setInfoForEdit(number, invNumberForMovement);
+		}
 	}
-	
+
 	public void showMovements() {
 		DialogUsual dialog = new DialogUsual(MainWindow.this, controller);
 		dialog.show();
 		dialog.getInfo();
 	}
-
-
-	public void update() {	
-		table.updateTableExhibitions();
-		System.out.println("UPDATE");
+	
+	public void showCard() {
+		DialogUsual dialog = new DialogUsual(MainWindow.this, controller);
+		dialog.show();
+		dialog.getExhibitCard();
 	}
 	
-	public void updateMovement(int invNumber) {	
+	public void showKits() {
+		DialogUsual dialog = new DialogUsual(MainWindow.this, controller);
+		dialog.show();
+		dialog.getKit();
+	}
+	
+	public void update() {
+		table.updateTableExhibitions();
+		isMainTable = true;
+	}
+
+	public void updateMovement(int invNumber) {
+		invNumberForMovement = invNumber;
 		table.updateTableMovement(invNumber);
-		System.out.println("UPDATE");
+	}
+	
+	public void updateCard(int invNumber) {
+		table.updateTableCard(invNumber);
+	}
+	
+	public void updateKit(String name) {
+		table.updateTableKit(name);
 	}
 
 	public void show() {

@@ -2,9 +2,6 @@ package view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -25,7 +22,7 @@ public class AddMovementDialog {
 	public Controller controller;
 
 	public AddMovementDialog(MainWindow mainWindow, Controller controller) {
-	
+
 		this.mainWindow = mainWindow;
 		this.controller = controller;
 		dialog.setTitle("Information");
@@ -53,10 +50,10 @@ public class AddMovementDialog {
 
 				Movement movement = new Movement();
 
-				movement.exhibit = controller.getExhibitByInvNumber(Integer.parseInt(input1.getText()));
+				movement.invNumber = Integer.parseInt(input1.getText());
 				movement.dateOfTransfer = input2.getText();
 				movement.dateOfReturn = input3.getText();
-				movement.organization = input4.getText();			
+				movement.organization = input4.getText();
 
 				controller.addMovement(movement);
 
@@ -66,7 +63,7 @@ public class AddMovementDialog {
 			}
 		});
 	}
-	
+
 	public void setInfoForDelete() {
 		dialog.remove(input4);
 		buttonAdd.addActionListener(new ActionListener() {
@@ -75,13 +72,36 @@ public class AddMovementDialog {
 
 				Movement movement = new Movement();
 
-				movement.exhibit = controller.getExhibitByInvNumber(Integer.parseInt(input1.getText()));
+				movement.invNumber = Integer.parseInt(input1.getText());
 				movement.dateOfTransfer = input2.getText();
-				movement.dateOfReturn = input3.getText();			
+				movement.dateOfReturn = input3.getText();
 
 				controller.deleteMovement(movement);
 
 				mainWindow.update();
+
+				dialog.setVisible(false);
+			}
+		});
+	}
+
+	public void setInfoForEdit(final int number, final int invNumber) {
+		buttonAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				Movement movement = controller.getMovement(number, invNumber);
+				Movement newMovement = new Movement();
+
+				newMovement.setInvNumber(Integer.parseInt(input1.getText()));
+				newMovement.setDateOfTransfer(input2.getText());
+				newMovement.setDateOfReturn(input3.getText());
+				newMovement.setOrganization(input4.getText());
+
+				System.out.println("NEW " + newMovement.getInvNumber() + " " + newMovement.getDateOfTransfer());
+				System.out.println("OLD " + movement.getInvNumber() + " " + movement.getDateOfTransfer());
+
+				controller.editMovement(movement, newMovement);
+
+				mainWindow.updateMovement(invNumber);
 
 				dialog.setVisible(false);
 			}

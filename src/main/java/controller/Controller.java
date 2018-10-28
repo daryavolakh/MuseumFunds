@@ -44,17 +44,31 @@ public class Controller {
 		dataBase.deleteExhibit(getExhibitByInvNumber(number));
 	}
 
-	public List<Movement> getMovement(int invNumber) {
+	public List<Movement> getMovements(int invNumber) {
 		return dataBase.getTableMovement(invNumber);
+	}
+	
+	public List<Movement> getMovementsWithInvNumber(int invNumber) {
+		return dataBase.getTableMovementWithInvNuber(invNumber);
+	}
+	
+	public Movement getMovement(int index, int invNumber) {
+		return getMovementsWithInvNumber(invNumber).get(index);
 	}
 
 	public void addMovement(Movement movement) {
 		dataBase.addMovement(movement);
 	}
 	
+	public void editMovement(Movement oldMovement, Movement newMovement) {
+		dataBase.editMovement(oldMovement,newMovement);
+	}
+	
 	public void deleteMovement(Movement movement) {
 		dataBase.deleteMovement(movement);
 	}
-
-	// controller.getExhibitByInvNumber(number);
+	
+	public List<Exhibit> getExhibitsFromOneKit(String name){
+		return dataBase.getExhibitsFromOneKit(name);
+	}
 }
