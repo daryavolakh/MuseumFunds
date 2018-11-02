@@ -45,7 +45,7 @@ public class MainWindow {
 		menuShow = new JMenu("Show");		
 
 		JMenuItem  buttAdd = new JMenuItem ("add exhibit");
-		JMenuItem  buttEdit = new JMenuItem ("edit exhibit");
+		JMenuItem  buttEdit = new JMenuItem ("edit exhibit/movement");
 		JMenuItem  buttDelete = new JMenuItem ("delete exhibit");
 		JMenuItem  buttonMovements = new JMenuItem ("show movements");
 		JMenuItem  buttShowCard = new JMenuItem("show exhibit card");

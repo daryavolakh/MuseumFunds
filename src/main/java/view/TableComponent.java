@@ -35,7 +35,6 @@ public class TableComponent extends JPanel {
 		setModelForExhibits();
 		clearTable();
 		List<Exhibit> exhibits = controller.getExhibits();
-		System.out.println("exhibits COUNT: " + exhibits.size());
 		for (int index = 0; index < exhibits.size(); index++) {
 			Vector<Serializable> row = new Vector<Serializable>();
 
@@ -44,10 +43,8 @@ public class TableComponent extends JPanel {
 			row.add((exhibits.get(index)).dateOfCreation);
 			row.add((exhibits.get(index)).author);
 			
-			System.out.println("-> " + (exhibits.get(index)).invNumber);
 			model.addRow(row);			
 		}
-		System.out.println("ROW COUNT: " + model.getRowCount());
 		
 	}
 
@@ -61,7 +58,6 @@ public class TableComponent extends JPanel {
 		setModelForMovement();
 		clearTable();
 		List<Movement> movements = controller.getMovements(invNumber);
-		System.out.println("exhibits COUNT: " + movements.size());
 		for (int index = 0; index < movements.size(); index++) {
 			Vector<String> row = new Vector<String>();
 
@@ -96,10 +92,10 @@ public class TableComponent extends JPanel {
 		for (int index = 0; index < list.size(); index++) {
 			Vector<String> row = new Vector<String>();
 
-			row.add((list.get(index)).getKit());
 			row.add((list.get(index)).getName());
 			row.add((list.get(index)).getDateOfCreation());
 			row.add((list.get(index)).getAuthor());
+			row.add((list.get(index)).getKit());
 			
 			model.addRow(row);			
 		}
@@ -144,12 +140,13 @@ public class TableComponent extends JPanel {
 	
 	public void setModelForKit() {
 		Vector<String> columns = new Vector<String>();
-		model = new DefaultTableModel(columns, 0);		
+		model = new DefaultTableModel(columns, 0);			
 		
-		columns.add("Комплект");
 		columns.add("Экспонат");
 		columns.add("Дата создания");
 		columns.add("Автор");
+		columns.add("Комплект");
+		
 //		columns.add("Ответственное лицо");
 		
 		table.setModel(model);

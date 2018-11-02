@@ -33,7 +33,7 @@ public class Controller {
 				return list.get(index);
 		}
 
-		return null; // ???
+		return null; 
 	}
 
 	public void editExhibit(Exhibit oldExhibit, Exhibit newExhibit) {

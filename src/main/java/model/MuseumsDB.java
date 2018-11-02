@@ -21,10 +21,12 @@ public class MuseumsDB {
 	private static final String INSERT_MOVEMENT = "INSERT INTO movements VALUES(?,?,?,?);";
 	private static final String DELETE_EXHIBIT = "DELETE FROM exhibits WHERE invNumber=?;";
 	private static final String DELETE_MOVEMENT = "DELETE FROM movements WHERE invNumber=? AND dateOfTransfer=? AND dateOfReturn=?;";
-	private static final String EDIT_EXHIBIT = "UPDATE exhibits SET invNumber=?, name=?, dateOfCreation=?, author=?, kit=?, responsible=? WHERE invNumber=? AND name=? AND dateOfCreation=? AND author=?;";
+	private static final String DELETE_MOVEMENT_BY_INVNUMBER = "DELETE FROM movements WHERE invNumber=?;";
+	private static final String EDIT_EXHIBIT = "UPDATE exhibits SET invNumber=?, name=?, dateOfCreation=?, author=?, kit=?, responsible=? WHERE invNumber=? AND name=? AND dateOfCreation=? AND author=? AND kit=? AND responsible=?;";
 	private static final String EDIT_MOVEMENT = "UPDATE movements SET invNumber=?, dateOfTransfer=?, dateOfReturn=?, organization=? WHERE invNumber=? AND dateOfTransfer=? AND dateOfReturn=? AND organization=?;";
+	private static final String EDIT_MOVEMENT_BY_INVNUMBER = "UPDATE movements SET invNumber=? WHERE invNumber=?;";
 
-	public MuseumsDB() throws SQLException { // throws SQLException
+	public MuseumsDB() throws SQLException {
 		try {
 			driver = new FabricMySQLDriver();
 		} catch (SQLException ex) {
@@ -99,12 +101,16 @@ public class MuseumsDB {
 	}
 
 	public void deleteExhibit(Exhibit exhibit) {
+		List<Movement> list = getTableMovementWithInvNuber(exhibit.getInvNumber());
 		try {
 			statement = connection.prepareStatement(DELETE_EXHIBIT);
-
 			statement.setInt(1, exhibit.getInvNumber());
 
 			statement.execute();
+			for (int index = 0; index < list.size(); index++) {
+				deleteMovementByInvNumber(list.get(index));
+			}
+
 		} catch (SQLException e) {
 			e.getMessage();
 			e.printStackTrace();
@@ -165,6 +171,18 @@ public class MuseumsDB {
 			statement.setString(12, oldExhibit.getResponsible());
 
 			statement.execute();
+
+			if (oldExhibit.getInvNumber() != newExhibit.getInvNumber()) {
+				List<Movement> list = getTableMovementWithInvNuber(oldExhibit.getInvNumber());
+				for (int index = 0; index < list.size(); index++) {
+					Movement newMovement = new Movement();
+					newMovement.setInvNumber(newExhibit.getInvNumber());
+					newMovement.setDateOfReturn(list.get(index).getDateOfReturn());
+					newMovement.setDateOfTransfer(list.get(index).getDateOfTransfer());
+					newMovement.setOrganization(list.get(index).getOrganization());
+					editMovement(list.get(index), newMovement);
+				}
+			}
 		} catch (SQLException e) {
 			e.getMessage();
 			e.printStackTrace();
@@ -191,6 +209,20 @@ public class MuseumsDB {
 		}
 	}
 
+	public void editMovementInvNumber(Movement movement, Movement newMovement) {
+		try {
+			statement = connection.prepareStatement(EDIT_MOVEMENT_BY_INVNUMBER);
+			
+			statement.setInt(1, newMovement.getInvNumber());
+			statement.setInt(1, movement.getInvNumber());
+
+			statement.execute();
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+	}
+
 	public void deleteMovement(Movement movement) {
 		try {
 			statement = connection.prepareStatement(DELETE_MOVEMENT);
@@ -198,7 +230,20 @@ public class MuseumsDB {
 			statement.setInt(1, movement.getInvNumber());
 			statement.setString(2, movement.getDateOfTransfer());
 			statement.setString(3, movement.getDateOfReturn());
-			// statement.setString(4, movement.getOrganization());
+
+			statement.execute();
+
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+	}
+
+	public void deleteMovementByInvNumber(Movement movement) {
+		try {
+			statement = connection.prepareStatement(DELETE_MOVEMENT_BY_INVNUMBER);
+
+			statement.setInt(1, movement.getInvNumber());
 
 			statement.execute();
 
@@ -258,22 +303,21 @@ public class MuseumsDB {
 		}
 		return list;
 	}
-	
-	public List<Exhibit> getExhibitsFromOneKit(String kit){
+
+	public List<Exhibit> getExhibitsFromOneKit(String kit) {
 		List<Exhibit> list = new ArrayList<Exhibit>();
 		try {
 			Statement statement = connection.createStatement();
 
-			ResultSet resultSet = statement.executeQuery(
-					"SELECT kit, name, dateOfCreation, author FROM exhibits WHERE kit="
-							+ kit + ";");
+			ResultSet resultSet = statement
+					.executeQuery("SELECT name, dateOfCreation, author, kit FROM exhibits WHERE kit=\"" + kit + "\";");
 			while (resultSet.next()) {
 				Exhibit exhibit = new Exhibit();
 
-				exhibit.setKit(resultSet.getString(1));
-				exhibit.setName(resultSet.getString(2));
-				exhibit.setDateOfCreation(resultSet.getString(3));
-				exhibit.setAuthor(resultSet.getString(4));
+				exhibit.setName(resultSet.getString(1));
+				exhibit.setDateOfCreation(resultSet.getString(2));
+				exhibit.setAuthor(resultSet.getString(3));
+				exhibit.setKit(resultSet.getString(4));
 
 				list.add(exhibit);
 			}
