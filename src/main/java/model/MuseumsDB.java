@@ -25,6 +25,9 @@ public class MuseumsDB {
 	private static final String EDIT_EXHIBIT = "UPDATE exhibits SET invNumber=?, name=?, dateOfCreation=?, author=?, kit=?, responsible=? WHERE invNumber=? AND name=? AND dateOfCreation=? AND author=? AND kit=? AND responsible=?;";
 	private static final String EDIT_MOVEMENT = "UPDATE movements SET invNumber=?, dateOfTransfer=?, dateOfReturn=?, organization=? WHERE invNumber=? AND dateOfTransfer=? AND dateOfReturn=? AND organization=?;";
 	private static final String EDIT_MOVEMENT_BY_INVNUMBER = "UPDATE movements SET invNumber=? WHERE invNumber=?;";
+	private static final String INSERT_KIT = "INSERT INTO kits VALUES(?,?);";
+	private static final String EDIT_KIT = "UPDATE kits SET kit=?, description=? WHERE kit=? AND description=?;";
+	
 
 	public MuseumsDB() throws SQLException {
 		try {
@@ -152,7 +155,62 @@ public class MuseumsDB {
 			e.printStackTrace();
 		}
 	}
+	
+	public void addKit(Kit kit) {
+		try {
+			statement = connection.prepareStatement(INSERT_KIT);
 
+			statement.setString(1, kit.getKit());
+			statement.setString(2, kit.getDescription());
+
+			statement.execute();
+
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+	}
+	
+	public void editKit(Kit oldKit, Kit newKit) {   //отредактировать тогда и у экспонатов!!!
+		try {
+			statement = connection.prepareStatement(EDIT_KIT);
+
+			statement.setString(1, newKit.getKit());
+			statement.setString(2, newKit.getDescription());
+			statement.setString(3, oldKit.getKit());
+			statement.setString(4, oldKit.getDescription());
+
+			statement.execute();
+			
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+	}
+
+	public List<Kit> getTableKit() {
+		List<Kit> list = new ArrayList<Kit>();
+		try {
+			Statement statement = connection.createStatement();
+
+			ResultSet resultSet = statement
+					.executeQuery("SELECT * FROM kits;");
+			while (resultSet.next()) {
+				Kit kit = new Kit();
+
+				kit.setKit(resultSet.getString(1));
+				kit.setDescription(resultSet.getString(2));
+
+				list.add(kit);
+			}
+
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	public void editExhibit(Exhibit oldExhibit, Exhibit newExhibit) {
 		try {
 			statement = connection.prepareStatement(EDIT_EXHIBIT);
@@ -327,5 +385,30 @@ public class MuseumsDB {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	public String searchPlace(int invNumber, String dateBegin, String dateEnd) {
+		//SELECT invNumber FROM movements WHERE (dateOfTransfer BETWEEN "2015-04-04" AND "2015-08-08") AND (dateOfTransfer BETWEEN "2015-04-04" AND "2015-08-08");
+		String org = null;
+		try {
+			Statement statement = connection.createStatement();
+
+			ResultSet resultSet = statement   
+					.executeQuery("SELECT organization FROM movements WHERE invNumber=" + invNumber + " AND (dateOfTransfer BETWEEN \"" + dateBegin + "\" AND \"" + dateEnd + "\") AND dateOfReturn BETWEEN \"" + dateBegin + "\" AND \"" + dateEnd + "\";");
+			while (resultSet.next()) {
+				Movement movement = new Movement();
+
+				movement.setOrganization(resultSet.getString(1));
+				org = resultSet.getString(1);
+				
+				System.out.println("ORG: " + org);
+			}
+
+		} catch (SQLException e) {
+			e.getMessage();
+			e.printStackTrace();
+		}
+		
+		return org;
 	}
 }

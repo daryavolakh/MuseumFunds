@@ -17,22 +17,25 @@ public class DialogUsual {
 	public JButton buttonAdd = new JButton("OK");
 	public JTextField input1 = new JTextField();
 	private JLabel label1 = new JLabel("Инв.номер: ");
+	public JTextField input2 = new JTextField();
+	private JLabel label2 = new JLabel("до: ");
 	private MainWindow mainWindow;
 	private Controller controller;
 
 	public DialogUsual(MainWindow mainWindow, Controller controller) {
-	
+
 		this.mainWindow = mainWindow;
 		this.controller = controller;
-		
+
 		dialog.setSize(310, 250);
 		dialog.setLayout(null);
 		dialog.setLocationByPlatform(true);
 
-		input1.setBounds(95, 20, 150, 30);
-		//input2.setBounds(60, 60, 250, 30);
-		label1.setBounds(15,20,70,30);
-		//label2.setBounds(20,60,40,30);
+		input1.setBounds(90, 20, 150, 30);
+		label1.setBounds(20, 20, 70, 30);
+		input2.setBounds(90, 60, 150, 30);
+		label2.setBounds(20, 60, 70, 30);
+
 		buttonAdd.setBounds(100, 150, 100, 30);
 
 		dialog.add(input1);
@@ -46,7 +49,7 @@ public class DialogUsual {
 
 			public void actionPerformed(ActionEvent event) {
 
-				int invNumber = Integer.parseInt(input1.getText());	
+				int invNumber = Integer.parseInt(input1.getText());
 
 				mainWindow.updateMovement(invNumber);
 
@@ -60,8 +63,8 @@ public class DialogUsual {
 		buttonAdd.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent event) {
-				
-				int invNumber = Integer.parseInt(input1.getText());	
+
+				int invNumber = Integer.parseInt(input1.getText());
 				controller.deleteExhibit(invNumber);
 
 				mainWindow.update();
@@ -70,14 +73,14 @@ public class DialogUsual {
 			}
 		});
 	}
-	
+
 	public void getExhibitCard() {
 		dialog.setTitle("Просмотр карточки экспоната");
 		buttonAdd.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent event) {
 
-				int invNumber = Integer.parseInt(input1.getText());	
+				int invNumber = Integer.parseInt(input1.getText());
 
 				mainWindow.updateCard(invNumber);
 
@@ -85,7 +88,7 @@ public class DialogUsual {
 			}
 		});
 	}
-	
+
 	public void getKit() {
 		dialog.setTitle("Просмотр комплекта");
 		label1.setText("Комплект:");
@@ -93,7 +96,7 @@ public class DialogUsual {
 
 			public void actionPerformed(ActionEvent event) {
 				label1.setText("Имя комплекта:");
-				String kit = input1.getText();	
+				String kit = input1.getText();
 
 				mainWindow.updateKit(kit);
 
@@ -101,7 +104,36 @@ public class DialogUsual {
 			}
 		});
 	}
-	
+
+	public void searchPlace() {
+		dialog.setTitle("Поиск в заданном интервале ");
+		label1.setText("Инв.номер:");
+		label2.setText("от:");
+
+		final JTextField input3 = new JTextField();
+		JLabel label3 = new JLabel("до:");
+
+		input3.setBounds(90, 100, 150, 30);
+		label3.setBounds(20, 100, 70, 30);
+
+		dialog.add(input2);
+		dialog.add(label2);
+		dialog.add(input3);
+		dialog.add(label3);
+		buttonAdd.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent event) {
+
+				int invNumber = Integer.parseInt(input1.getText());
+				String dateBegin = input2.getText();
+				String dateEnd = input3.getText();
+
+				mainWindow.table.updateTablePlace(invNumber, controller.searchPlace(invNumber, dateBegin, dateEnd));
+				dialog.setVisible(false);
+			}
+		});
+	}
+
 	public void show() {
 		dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		dialog.setVisible(true);

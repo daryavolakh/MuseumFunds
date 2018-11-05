@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 import controller.Controller;
 import model.Exhibit;
+import model.Kit;
 import model.Movement;
 
 @SuppressWarnings("serial")
@@ -101,6 +102,46 @@ public class TableComponent extends JPanel {
 		}
 	}
 	
+	public void updateTablePlace(int number, String org) {
+		setModelForSearch();
+		if (org == null) {
+			Vector<String> row = new Vector<String>();
+			row.add(controller.getExhibitByInvNumber(number).getName());   //поправь!
+			row.add("в музее");
+			
+			model.addRow(row);
+		}
+		
+		else {
+			Vector<String> row = new Vector<String>();
+			row.add(controller.getExhibitByInvNumber(number).getName());    //поправь!
+			row.add(org);
+			model.addRow(row);
+		}
+		
+	}
+	
+	public void updateKits() {
+		
+		Vector<String> columns = new Vector<String>();
+		model = new DefaultTableModel(columns, 0);			
+		
+		columns.add("Компонент");
+		columns.add("Описание");
+		
+		List<Kit> list = controller.getTableKit();
+		
+		for (int index = 0; index < list.size(); index++) {
+			Vector<String> row = new Vector<String>();
+
+			row.add((list.get(index)).getKit());
+			row.add(list.get(index).getDescription());			
+			model.addRow(row);			
+		}
+		
+		table.setModel(model);
+	}
+	
 	public void setModelForMovement() {
 		Vector<String> columns = new Vector<String>();
 		model = new DefaultTableModel(columns, 0);		
@@ -135,6 +176,16 @@ public class TableComponent extends JPanel {
 		columns.add("Комплект");
 		columns.add("Ответственное лицо");
 		
+		table.setModel(model);
+	}
+	
+
+	
+	public void setModelForSearch() {
+		Vector<String> columns = new Vector<String>();
+		model = new DefaultTableModel(columns, 0);
+		columns.add("Экспонат");
+		columns.add("Место");
 		table.setModel(model);
 	}
 	

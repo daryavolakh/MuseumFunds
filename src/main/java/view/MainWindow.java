@@ -45,11 +45,15 @@ public class MainWindow {
 		menuShow = new JMenu("Show");		
 
 		JMenuItem  buttAdd = new JMenuItem ("add exhibit");
+		JMenuItem  buttAddKit = new JMenuItem ("add kit");
 		JMenuItem  buttEdit = new JMenuItem ("edit exhibit/movement");
+		JMenuItem  buttEditKit = new JMenuItem ("edit kit");
 		JMenuItem  buttDelete = new JMenuItem ("delete exhibit");
 		JMenuItem  buttonMovements = new JMenuItem ("show movements");
 		JMenuItem  buttShowCard = new JMenuItem("show exhibit card");
+		JMenuItem  buttShowOneKit = new JMenuItem("show kit");
 		JMenuItem  buttShowKits = new JMenuItem("show kits");
+		JMenuItem  buttShowPlace = new JMenuItem("show place by date");
 		
 		JMenuItem  buttAddMovement = new JMenuItem ("add movement");
 		JMenuItem  buttDeleteMovement = new JMenuItem ("delete movement");
@@ -57,16 +61,19 @@ public class MainWindow {
 		
 		menuAdd.add(buttAdd);
 		menuAdd.add(buttAddMovement);
+		menuAdd.add(buttAddKit);
 		
 		menuEdit.add(buttEdit);
+		menuEdit.add(buttEditKit);
 		
 		menuDelete.add(buttDelete);
 		menuDelete.add(buttDeleteMovement);
 		
 		menuShow.add(buttonMovements);
+		menuShow.add(buttShowOneKit);
 		menuShow.add(buttShowKits);
 		menuShow.add(buttShowCard);
-		
+		menuShow.add(buttShowPlace);		
 		
 		buttBack.setBounds(480, 10, 80, 20);
 
@@ -102,6 +109,15 @@ public class MainWindow {
 				edit(selectedRow[0]);
 			}
 		});
+		
+		buttEditKit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				int[] selectedRow = table.getTable().getSelectedRows();
+				selectedRow[0] = table.getTable().convertRowIndexToModel(selectedRow[0]);
+				table.getModel().getValueAt(selectedRow[0], 0); 
+				editKit(selectedRow[0]);
+			}
+		});
 
 		buttonMovements.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
@@ -129,9 +145,21 @@ public class MainWindow {
 			}
 		});
 		
+		buttAddKit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				addKit();
+			}
+		});
+		
+		buttShowOneKit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showOneKit();
+			}
+		});
+		
 		buttShowKits.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
-				showKits();
+				updateKits();
 			}
 		});
 		
@@ -141,10 +169,21 @@ public class MainWindow {
 			}
 		});
 		
+		buttShowPlace.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showPlace();
+			}
+		});		
 	}
 
 	public void add() {
 		AddExhibitDialog dialog = new AddExhibitDialog(MainWindow.this, controller);
+		dialog.show();
+		dialog.setInfo();
+	}
+	
+	public void addKit() {
+		AddKitDialog dialog = new AddKitDialog(MainWindow.this, controller);
 		dialog.show();
 		dialog.setInfo();
 	}
@@ -191,10 +230,17 @@ public class MainWindow {
 		dialog.getExhibitCard();
 	}
 	
-	public void showKits() {
+	public void showOneKit() {
 		DialogUsual dialog = new DialogUsual(MainWindow.this, controller);
 		dialog.show();
 		dialog.getKit();
+	}
+	
+	public void editKit(int number) {
+		AddKitDialog dialog = new AddKitDialog(MainWindow.this, controller);
+		dialog.show();
+		dialog.setInfoForEdit(number);
+		//дописать вызов и так далее
 	}
 	
 	public void update() {
@@ -213,6 +259,20 @@ public class MainWindow {
 	
 	public void updateKit(String name) {
 		table.updateTableKit(name);
+	}
+	
+	public void updateKits() {
+		table.updateKits();
+	}
+	
+	public void showPlace() {
+		DialogUsual dialog = new DialogUsual(MainWindow.this, controller);
+		dialog.show();
+		dialog.searchPlace();
+	}
+	
+	public void updateTablePlace(int invNumber, String org) {
+		table.updateTablePlace(invNumber, org);
 	}
 
 	public void show() {

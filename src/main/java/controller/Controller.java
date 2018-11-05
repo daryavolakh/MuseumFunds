@@ -5,6 +5,7 @@ import model.MuseumsDB;
 import java.sql.SQLException;
 import java.util.List;
 import model.Exhibit;
+import model.Kit;
 import model.Movement;
 
 public class Controller {
@@ -70,5 +71,25 @@ public class Controller {
 	
 	public List<Exhibit> getExhibitsFromOneKit(String name){
 		return dataBase.getExhibitsFromOneKit(name);
+	}
+	
+	public String searchPlace(int number, String dateBegin, String dateEnd) {
+		return dataBase.searchPlace(number, dateBegin, dateEnd);
+	}
+	
+	public void addKit(Kit kit) {
+		dataBase.addKit(kit);
+	}
+	
+	public void editKit(Kit oldKit, Kit newKit) {
+		dataBase.editKit(oldKit, newKit);
+	}
+	
+	public List<Kit> getTableKit(){
+		return dataBase.getTableKit();
+	}
+	
+	public Kit getKit(int number) {
+		return dataBase.getTableKit().get(number);
 	}
 }
